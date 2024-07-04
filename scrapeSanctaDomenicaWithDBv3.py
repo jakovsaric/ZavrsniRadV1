@@ -16,7 +16,8 @@ def create_table():
                  screen_type TEXT NOT NULL DEFAULT 'Other',
                  tv_code TEXT NOT NULL DEFAULT 'Unknown',
                  product_link TEXT NOT NULL DEFAULT 'Unknown',
-                 image_link TEXT NOT NULL DEFAULT 'Unknown')''')
+                 image_link TEXT NOT NULL DEFAULT 'Unknown',
+                 store TEXT NOT NULL DEFAULT 'Sancta Domenica')''')
     conn.commit()
     conn.close()
 
@@ -26,8 +27,8 @@ def insert_data(name, price, screen_size, manufacturer, screen_type, tv_code, pr
     c = conn.cursor()
     try:
         c.execute(
-            "INSERT INTO productsSanctaDomenica (name, price, screen_size, manufacturer, screen_type, tv_code, product_link, image_link) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (name, price, screen_size, manufacturer, screen_type, tv_code, product_link, image_link))
+            "INSERT INTO productsSanctaDomenica (name, price, screen_size, manufacturer, screen_type, tv_code, product_link, image_link, store) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (name, price, screen_size, manufacturer, screen_type, tv_code, product_link, image_link, 'Sancta Domenica'))
         conn.commit()
     except sqlite3.IntegrityError:
         print(f"Product '{name}' already exists in the database. Skipping.")
@@ -158,7 +159,7 @@ headers = {
 }
 
 # Clear existing data from the database
-clear_data()
+#clear_data()
 
 # Create table in the database
 create_table()
