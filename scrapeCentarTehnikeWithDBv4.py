@@ -77,7 +77,11 @@ def extract_products(soup):
             price_float = float(re.sub(r"[^\d,]", "", price_str).replace(",", "."))
 
             # Extract screen size
-            screen_size_tag = article.find("li", class_="cp-attr")
+            screen_size_tag = None
+            for li in article.find_all("li", class_="cp-attr"):
+                if "cm" in li.text or '"' in li.text:  # Check for keywords indicating screen size
+                    screen_size_tag = li
+                    break
             screen_size = extract_screen_size(screen_size_tag.text) if screen_size_tag else 0
 
             # Extract manufacturer
@@ -127,10 +131,27 @@ def extract_screen_type(name):
             return screen_type
     return "Other"
 
+
 def extract_tv_code(name, manufacturer):
-    code_match = re.search(rf'{manufacturer} (.*)', name)
+    # Remove "(izlog)" from the name if it exists
+    name = name.replace("(izlog)", "").strip()
+
+    # Find the part of the string after the manufacturer's name
+    code_match = re.search(rf'{manufacturer}\s+(.*)', name)
     if code_match:
-        return manufacturer + ' ' + code_match.group(1).strip()
+        # Split the string into parts using space as a delimiter
+        parts = code_match.group(1).strip().split()
+
+        # Filter the parts based on the given conditions
+        filtered_parts = [
+            part for part in parts
+            if len(part) > 4 and not part.isalpha()  # Length > 4 and not just letters
+        ]
+
+        # Join the filtered parts back into a string
+        if filtered_parts:
+            return ' '.join(filtered_parts)  # Manufacturer is removed here
+
     return "Unknown"
 
 # URL of the initial webpage to scrape

@@ -94,13 +94,13 @@ def extract_products(soup):
 
 # Function to parse the price string into a float
 def parse_price(price_str):
-    # Remove currency symbol and convert comma to dot
-    cleaned_price = price_str.replace("€", "").replace(",", ".").strip()
-    try:
+    # Match price with or without thousands separator and with a decimal comma
+    match = re.search(r'\d{1,3}(?:\.\d{3})*(?:,\d+)?', price_str)
+    if match:
+        cleaned_price = match.group().replace(".", "").replace(",", ".")
         return float(cleaned_price)
-    except ValueError:
-        print(f"Could not parse price string: {price_str}")
-        return 0.0
+    else:
+        raise ValueError(f"Could not parse price string: {price_str}")
 
 # Function to get the next page URL
 def get_next_page_url(current_url, current_page):
@@ -122,7 +122,7 @@ def extract_screen_size(text):
     return int(match.group(1)) if match else 0
 
 def extract_manufacturer(name):
-    manufacturers = ["Samsung", "LG", "Tesla", "Sony", "Philips", "Hisense", "TCL", "VIVAX", "Panasonic"]
+    manufacturers = ["Samsung", "LG", "Tesla", "Sony", "Philips", "Hisense", "TCL", "Vivax", "Panasonic"]
     for manufacturer in manufacturers:
         if manufacturer in name:
             return manufacturer
@@ -132,12 +132,23 @@ def extract_screen_type(text):
     match = re.search(r"Panel: (\w+)", text)
     return match.group(1) if match else "Other"
 
+
 def extract_tv_code(name, manufacturer, screen_size):
-    name = re.sub(r'TV|,.*|'+manufacturer+r'|\b' + str(screen_size) + r'"', '', name).strip()
-    return name
+    # Remove "TV", the manufacturer, and screen size from the name
+    name = re.sub(r'TV|,.*|' + manufacturer + r'|\b' + str(screen_size) + r'"', '', name).strip()
+
+    # Split the name by spaces
+    parts = name.split()
+
+    # Filter out any parts that consist only of letters
+    filtered_parts = [part for part in parts if not part.isalpha()]
+
+    # Join the filtered parts back into a single string
+    return ' '.join(filtered_parts)
+
 
 # URL of the initial webpage to scrape
-base_url = "https://www.instar-informatika.hr/svi-televizori/260/"
+base_url = "https://www.instar-informatika.hr/svi-televizori/260/?p=12&s=24"
 
 # Set headers to mimic a legitimate browser request
 headers = {

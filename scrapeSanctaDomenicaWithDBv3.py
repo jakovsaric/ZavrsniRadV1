@@ -144,10 +144,33 @@ def extract_screen_type(name):
             return screen_type
     return "Other"
 
+
 def extract_tv_code(name, manufacturer):
+    # Match the part of the name that comes after the manufacturer's name
     code_match = re.search(rf'{manufacturer} (.*)', name)
+
     if code_match:
-        return manufacturer + ' ' + code_match.group(1).strip()
+        # Get the matched part and strip any leading/trailing spaces
+        code = code_match.group(1).strip()
+
+        # Split the code into parts using space as a delimiter
+        parts = code.split()
+
+        # Filter out parts that are just letters, shorter than 4 characters, or contain a comma
+        filtered_parts = [
+            part for part in parts
+            if not part.isalpha() and len(part) > 3 and ',' not in part
+        ]
+
+        # Join the filtered parts back into a string
+        if filtered_parts:
+            tv_code = ' '.join(filtered_parts)
+
+            # Ensure the final tv_code does not end with a comma
+            tv_code = tv_code.rstrip(',')
+
+            return tv_code
+
     return "Unknown"
 
 # URL of the initial webpage to scrape

@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List</title>
+    <title>Discounts KING</title>
+    <link rel="icon" type="image/x-icon" href="/static/icon_rm_bg.png">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script>
         function sortProducts() {
             const select = document.getElementById('sort_option');
+            const manufacturerSelect = document.getElementById('manufacturer');
             const selectedValue = select.value;
-            window.location.href = `/?sort_option=${selectedValue}`;
+            const selectedManufacturer = manufacturerSelect.value;
+            window.location.href = `/?sort_option=${selectedValue}&manufacturer=${selectedManufacturer}`;
         }
     </script>
 </head>
 <body>
     <h1>Product List</h1>
+
+    <label for="manufacturer">Filter by Manufacturer:</label>
+    <select name="manufacturer" id="manufacturer" onchange="sortProducts()">
+        <option value="All" {% if selected_manufacturer == 'All' %}selected{% endif %}>All Manufacturers</option>
+        {% for manufacturer in manufacturers %}
+            <option value="{{ manufacturer['manufacturer'] }}" {% if selected_manufacturer == manufacturer['manufacturer'] %}selected{% endif %}>{{ manufacturer['manufacturer'] }}</option>
+        {% endfor %}
+    </select>
 
     <label for="sort_option">Sort By:</label>
     <select name="sort_option" id="sort_option" onchange="sortProducts()">
@@ -32,6 +43,8 @@
         <option value="screen_type_desc" {% if sort_option == 'screen_type_desc' %}selected{% endif %}>Screen Type Descending</option>
         <option value="tv_code_asc" {% if sort_option == 'tv_code_asc' %}selected{% endif %}>TV Code Ascending</option>
         <option value="tv_code_desc" {% if sort_option == 'tv_code_desc' %}selected{% endif %}>TV Code Descending</option>
+        <option value="store_asc" {% if sort_option == 'store_asc' %}selected{% endif %}>Store Ascending</option>
+        <option value="store_desc" {% if sort_option == 'store_desc' %}selected{% endif %}>Store Descending</option>
     </select>
 
     <div class="product-container">
@@ -48,9 +61,14 @@
                 <p>Screen Size: {{ row['screen_size'] }}</p>
                 <p>Screen Type: {{ row['screen_type'] }}</p>
                 <p>Store: {{ row['store'] }}</p>
-            </div>
-            <div class="product-tv-code">
-                <p>TV Code: {{ row['tv_code'] }}</p>
+
+                {% if row['store_link_pairs'] %}
+                    <p>Another stores:
+                        {% for store, link in row['store_link_pairs'] %}
+                            <a href="{{ link }}" target="_blank">{{ store }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
             </div>
             <div class="product-price">
                 <p>{{ "%.2f" | format(row['price']) }}€</p>

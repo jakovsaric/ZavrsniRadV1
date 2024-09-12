@@ -67,6 +67,8 @@ select:focus {
 }
 
 .product-card img {
+    width: 400px;
+    height: 400px;
     max-width: 100%;
     border-radius: 10px;
 }
@@ -87,8 +89,61 @@ select:focus {
     font-size: 16px;
 }
 
+.product-details a {
+    color: #0099ff; /* Change this to your desired color */
+    text-decoration: none; /* Remove underline */
+}
+
+.product-details a:hover {
+    color: #388E3C; /* Change this to your desired hover color */
+    text-decoration: underline; /* Underline on hover */
+}
+
+
 .product-price {
     font-size: 18px;
     font-weight: bold;
     margin-top: auto;
 }
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.filter-sidebar {
+    width: 250px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    margin-right: 20px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section h3 {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.filter-content {
+    display: none; /* Hidden by default, displayed on click */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-top: none;
+    background-color: #000;
+}
+
+.slider {
+    width: 100%;
+}
+
+#priceValue {
+    font-weight: bold;
+}
+
