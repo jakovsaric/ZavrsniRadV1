@@ -94,7 +94,8 @@ def extract_products(soup):
             # Extract TV code
             tv_code = extract_tv_code(name, manufacturer) or "Unknown"
 
-            products.append((name, price_float, screen_size, manufacturer, screen_type, tv_code, product_link, image_link))
+            products.append((name, price_float, screen_size, manufacturer, screen_type, tv_code, product_link,
+                             image_link))
         except Exception as e:
             print(f"Error processing item: {e}")
     return products

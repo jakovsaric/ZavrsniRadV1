@@ -79,9 +79,11 @@ for i, tv1 in enumerate(all_tvs):
 
     # Insert the result into productsCompared
     cursor.execute('''
-        INSERT INTO productsCompared (name, price, screen_size, manufacturer, screen_type, tv_code, product_link, image_link, store, another_stores, stores_links)
+        INSERT INTO productsCompared (name, price, screen_size, manufacturer, screen_type, 
+        tv_code, product_link, image_link, store, another_stores, stores_links)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (main_tv[1], main_tv[2], main_tv[3], main_tv[4], main_tv[5], main_tv[6], main_tv[7], main_tv[8], main_tv[9],
+    ''', (main_tv[1], main_tv[2], main_tv[3], main_tv[4], main_tv[5], main_tv[6],
+          main_tv[7], main_tv[8], main_tv[9],
           another_stores if another_stores else None, stores_links if stores_links else None))
 
     processed.add(i)

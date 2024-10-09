@@ -6,7 +6,8 @@ url = "https://www.centar-tehnike.hr/proizvodi/televizori-smart-tv/"
 
 # Set headers to mimic a legitimate browser request
 headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99"
+                  " Safari/537.36"
 }
 
 # Send a GET request to the URL
@@ -23,10 +24,10 @@ for article in product_articles:
     # Extract product details
     name = article.find("h2", class_="cp-title").text.strip()
     price = article.find("div", class_="modal-price-main").text.strip().split("\n")[-1].strip()
-    #specs = [spec.text.strip() for spec in article.find("ul", class_="cp-attrs").find_all("li")]
+    # specs = [spec.text.strip() for spec in article.find("ul", class_="cp-attrs").find_all("li")]
 
     # Print product details
     print("Name:", name)
     print("Price:", price)
-    #print("Specifications:", specs)
+    # print("Specifications:", specs)
     print()

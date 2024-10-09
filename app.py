@@ -47,7 +47,7 @@ def index():
     manufacturers = cursor.fetchall()
 
     # Prepare the query with an optional manufacturer filter
-    query = f"SELECT * FROM productsCompared WHERE 1=1"
+    query = f"SELECT * FROM productsCompared WHERE 1=1 AND screen_size > 0"
 
     if selected_manufacturer and selected_manufacturer != 'All':
         query += f" AND manufacturer = ?"
@@ -72,7 +72,9 @@ def index():
             row_dict['store_link_pairs'] = []
         processed_rows.append(row_dict)
 
-    return render_template('index.html', rows=processed_rows, sort_option=sort_option, manufacturers=manufacturers,
+    return render_template('index.html', rows=processed_rows,
+                           sort_option=sort_option,
+                           manufacturers=manufacturers,
                            selected_manufacturer=selected_manufacturer)
 
 
